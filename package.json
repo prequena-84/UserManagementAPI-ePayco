@@ -29,6 +29,7 @@
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "morgan": "^1.10.0",
     "server": "^1.0.41"
@@ -42,6 +43,7 @@
     "@types/express": "^5.0.2",
     "@types/helmet": "^0.0.48",
     "@types/http-errors": "^2.0.4",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.96",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.15.29",
