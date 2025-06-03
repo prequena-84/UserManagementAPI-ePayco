@@ -2,41 +2,60 @@
 import { generateToken } from '../utils/jwt'
 import ISR from '../class/class-router'
 import bodyParser from 'body-parser'
+import axios from 'axios'
+
+import sendEmailToken from '../modules/envio-mail/envio-mail'
 
 // Importacion de typos e interfaces de TypeScript
 import type { TRequest,TResponse } from 'types/TRouter'
-//import type { IUser } from 'interfaces/Iuser'
-
-// Importación de Encryptación de contraseña
-import bcrypt from 'bcrypt'
 
 // Importación del sservicio consulta del servicio de la base de datos
+const uriConsultaDocUsuario = process.env.URI_API_CONSULTA_DOC_USUARIOS || ''
+const uriConsultaIdTransaccion:string = process.env.URI_API_CONSULTA_ID_TRANSACCIONES || ''
+const uriModificarTransaccion =  process.env.URI_API_ACTUALIZAR_TRANSACCIONES || ''
 
-const dataUsers = []
 const CR = new ISR(), Router = CR.Router()
 
 Router.use(bodyParser.json())
 
 Router.post('/', async ( req:TRequest, res:TResponse ) => {
     try {
-        const { userName, Password } = req.body.dataUser
-        if ( !userName || !Password ) res.status(400).json({ message: 'Datos incompletos' })
-        
-        // Insertar con sulta a la API    
-        //await connectDB()
-        //const userDB = await User.findOne( {userName:userName} );
+        const datoDocumento = req.body
 
-        const userValidation = ''//await bcrypt.compare(Password, userDB?.Password || '')
+        if ( !datoDocumento.documento || !datoDocumento.idTransaccion ) res.status(400).json({ message: 'Datos incompletos' })
 
-        if ( userValidation ) {
-            dataUsers.push({ userName, Password })
-            const token = generateToken(userName)
+        const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {datoDocumento})    
+        const datosUsuario = await axios.post(uriConsultaDocUsuario, {datoDocumento})
 
-            res.status(201).json({ message: 'Autorizado', token })
+        console.log('datos de la transaccion', datoDocumento.data)
+        console.log('datos del usuario', datosUsuario.data)
+    
+        if ( datosTransaccion.data.data.usuario_doc === datoDocumento.documento && datosTransaccion.data.data.status === "pendiente" && datosTransaccion.data.data.tipo === "pago") {
+            const tokkenSesion = generateToken()
+
+            datosTransaccion.data.data.token_confirmacion = tokkenSesion.token
+            datosTransaccion.data.data.session_Exp = tokkenSesion.timeExp
+            const responseRegSessionToken = await axios.post(uriModificarTransaccion, datosTransaccion.data.data )
+
+            console.log(responseRegSessionToken.data.data)
+
+            const response = await sendEmailToken(
+                datosUsuario.data.data.email,
+                datosUsuario.data.data.nombre,
+                responseRegSessionToken.data.data.token_confirmacion,
+            )
+
+            console.log(response)
+
+            res.status(200).json({ 
+                data:response,
+                message: 'Se ha enviado el mail con el token para validarlo'
+            })
+
         } else {
-
-            res.status(401).json({ message: 'No Autorizado' })
+            res.status(401).json({ message: 'No Autorizado, Error en los datos de la autorizacion' })
         }
+
     } catch(err) {
          res.status(500).json({ message: `se presento este error: ${err}` })
     }
