@@ -1,17 +1,20 @@
 // Importación de class Router y Servidor
 import routerInstancia from '../class/class-router'
+import verifyToken from '../middleware/auth.middleware'
+import bodyParser from 'body-parser'
 
 // Servicios VRouter Servicios
 import AGREGAR_TRANSACCION from '../routers/transaccion/router-agregar-transaccion'
 import CONSULTA_TRANSACCIONES from '../routers/consulta/router-consulta-transaccion'
 import CONFIRMAR_TRANSACCION from '../routers/transaccion/confirmar-transaccion'
 
-
 // Importación de tipos
 import type { TRequest,TResponse } from 'types/TRouter'
 
 // Instancia de la clase Servido y Router
 const CR = new routerInstancia(), Router = CR.Router()
+
+Router.use(bodyParser.json())
 
 // Importación de la descripcion del servicio
 Router.get('/', async( _req:TRequest, res:TResponse ): Promise<void> => {
@@ -28,10 +31,6 @@ Router.get('/', async( _req:TRequest, res:TResponse ): Promise<void> => {
 
 Router.use('/agregar', AGREGAR_TRANSACCION)
 Router.use('/consulta', CONSULTA_TRANSACCIONES)
-Router.use('/confirmar-transaccion', CONFIRMAR_TRANSACCION)
+Router.use('/confirmar-transaccion', verifyToken, CONFIRMAR_TRANSACCION)
 
 export default Router
-
-/**
- * QUEDE EN VALIDAR EL TOKEN EN EL MIDDLEWARE TRANSFORMADO
- */

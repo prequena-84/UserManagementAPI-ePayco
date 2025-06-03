@@ -1,24 +1,29 @@
 import type { TRequest,TResponse,TNextFunction } from 'types/TRouter'
-import { validateToken } from '../utils/jwt'
+import { validateToken } from '../utils/validacion-token'
 
-const verifyJWT  = ( req:TRequest, res:TResponse, next:TNextFunction ): void => {
-    const authHeader = req.headers.authorization
+const verifyToken  = async ( req:TRequest, res:TResponse, next:TNextFunction ): Promise<void> => {
+    try {
+        const datoDocumento = req.body
+        const authHeader = req.headers.authorization
 
-    if (!authHeader ) {
-        res.status(401).json({ message: 'Token requerido' })
-        return  
-    }
-    
-    const token = authHeader.split(' ')[1]
-    const payload = validateToken(token)
+        if (!authHeader ) {
+            res.status(401).json({ message: 'Token requerido' })
+            return  
+        }
+        
+        const token = authHeader.split(' ')[1]
+        const respuesta:boolean = await validateToken(token,datoDocumento)
 
-   if (!payload || typeof payload === 'string') {
-        res.status(403).json({ message: 'Token inválido' });
+        if (respuesta === false) {
+            res.status(403).json({ message: 'Token inválido' });
+            return;
+        }
+
+        next();
+    } catch (err) {
+        res.status(500).json({ message: `Error en la Validacion del Token: ${err}` });
         return;
     }
-    // Aquí asumimos que el payload tiene la propiedad userName
-    req.userName = payload.userName; // Aseguramos de que userName esté en el JwtPayload y sea un string
-    next(); // Llama a next() para continuar con la siguiente función
 }
 
-export default verifyJWT
+export default verifyToken

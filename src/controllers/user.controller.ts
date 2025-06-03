@@ -1,5 +1,5 @@
 // Importación de Componentes
-import { generateToken } from '../utils/jwt'
+import { generateToken } from '../utils/validacion-token'
 import ISR from '../class/class-router'
 import bodyParser from 'body-parser'
 import axios from 'axios'
@@ -21,7 +21,6 @@ Router.use(bodyParser.json())
 Router.post('/', async ( req:TRequest, res:TResponse ) => {
     try {
         const datoDocumento = req.body
-
         if ( !datoDocumento.documento || !datoDocumento.idTransaccion ) res.status(400).json({ message: 'Datos incompletos' })
 
         const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {datoDocumento})    

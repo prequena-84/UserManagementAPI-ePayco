@@ -19,16 +19,9 @@ Router.use(bodyParser.json())
 
 Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
     try {
-
-        const datoDocumento:IToken = req.body.data
-
-        const datosUsuario = await axios.post(uriConsultaDocUsuario, {
-            datoDocumento
-        })
-
-        const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {
-            datoDocumento
-        })
+        const datoDocumento:IToken = req.body
+        const datosUsuario = await axios.post(uriConsultaDocUsuario,{ datoDocumento })
+        const datosTransaccion = await axios.post(uriConsultaIdTransaccion,{ datoDocumento })
 
         if ( datosUsuario.data.data.saldo >= datosTransaccion.data.data.monto) {
 
@@ -54,7 +47,7 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
     } catch(err) {
         res.status(500).send({
             data:null,
-            message: `Confirmacion Invalida Ingrese UN ID de transaccion Valido`,
+            message: `Confirmacion Invalida por el siguiente Error: ${err}`,
         })
     }
 })
