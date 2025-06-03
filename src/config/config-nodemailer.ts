@@ -1,6 +1,5 @@
 import path from 'path'
 import type { IConfigNodemailer } from "interfaces/IConfig-nodemailer";
-import { env } from 'process';
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 const configTransporter:IConfigNodemailer = {

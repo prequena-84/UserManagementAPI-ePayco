@@ -25,7 +25,7 @@ Router.post('/', async ( req:TRequest, res:TResponse ) => {
 
         const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {datoDocumento})    
         const datosUsuario = await axios.post(uriConsultaDocUsuario, {datoDocumento})
-    
+   
         if ( datosTransaccion.data.data.usuario_doc === datoDocumento.documento && datosTransaccion.data.data.status === "pendiente" && datosTransaccion.data.data.tipo === "pago") {
 
             const tokkenSesion = generateToken()
@@ -49,7 +49,8 @@ Router.post('/', async ( req:TRequest, res:TResponse ) => {
         }
 
     } catch(err) {
-         res.status(500).json({ message: `se presento este error: ${err}` })
+        console.log(err)
+        res.status(500).json({ message: `se presento este error: ${err}` })
     }
 })
 
