@@ -34,7 +34,8 @@
     "mongoose": "^8.15.1",
     "morgan": "^1.10.0",
     "nodemailer": "^7.0.3",
-    "server": "^1.0.41"
+    "server": "^1.0.41",
+    "server2-epayco": "file:"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

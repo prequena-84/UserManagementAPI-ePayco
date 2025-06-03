@@ -31,21 +31,17 @@ Router.post('/', async ( req:TRequest, res:TResponse ) => {
         console.log('datos del usuario', datosUsuario.data)
     
         if ( datosTransaccion.data.data.usuario_doc === datoDocumento.documento && datosTransaccion.data.data.status === "pendiente" && datosTransaccion.data.data.tipo === "pago") {
-            const tokkenSesion = generateToken()
 
+            const tokkenSesion = generateToken()
             datosTransaccion.data.data.token_confirmacion = tokkenSesion.token
             datosTransaccion.data.data.session_Exp = tokkenSesion.timeExp
             const responseRegSessionToken = await axios.post(uriModificarTransaccion, datosTransaccion.data.data )
-
-            console.log(responseRegSessionToken.data.data)
 
             const response = await sendEmailToken(
                 datosUsuario.data.data.email,
                 datosUsuario.data.data.nombre,
                 responseRegSessionToken.data.data.token_confirmacion,
             )
-
-            console.log(response)
 
             res.status(200).json({ 
                 data:response,

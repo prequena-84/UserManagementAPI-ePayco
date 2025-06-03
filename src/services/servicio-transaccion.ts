@@ -31,3 +31,7 @@ Router.use('/consulta', CONSULTA_TRANSACCIONES)
 Router.use('/confirmar-transaccion', CONFIRMAR_TRANSACCION)
 
 export default Router
+
+/**
+ * QUEDE EN VALIDAR EL TOKEN EN EL MIDDLEWARE TRANSFORMADO
+ */
