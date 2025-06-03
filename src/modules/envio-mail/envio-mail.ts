@@ -14,12 +14,10 @@ const sendEmailToken = async (to: string, nombre: string, token: string) => {
 
     try {
         const envioEmail = await transporter.sendMail(opcionesEmail)
-        console.log(envioEmail)
-
         return `Se envio el mail con el token sastifactoriamente`
     } catch(err) {
 
-        console.log('Error enviando email:', err)
+        console.error('Error enviando email:', err)
         return `ocurrio este error : ${err}`
     }
 }

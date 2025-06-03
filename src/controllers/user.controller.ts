@@ -26,9 +26,6 @@ Router.post('/', async ( req:TRequest, res:TResponse ) => {
 
         const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {datoDocumento})    
         const datosUsuario = await axios.post(uriConsultaDocUsuario, {datoDocumento})
-
-        console.log('datos de la transaccion', datoDocumento.data)
-        console.log('datos del usuario', datosUsuario.data)
     
         if ( datosTransaccion.data.data.usuario_doc === datoDocumento.documento && datosTransaccion.data.data.status === "pendiente" && datosTransaccion.data.data.tipo === "pago") {
 
