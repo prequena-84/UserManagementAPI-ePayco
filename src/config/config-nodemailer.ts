@@ -15,7 +15,7 @@ const configTransporter:IConfigNodemailer = {
     },
 };
 
-const configCuerpoEmail = (nombre: string, token: string) => `
+const configCuerpoEmail = (nombre: string, token: string | null) => `
   <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #eaeaea; padding: 20px; border-radius: 8px;">
     <h2 style="color: #333;">Hola ${nombre},</h2>
     <p>Tu código de verificación es:</p>

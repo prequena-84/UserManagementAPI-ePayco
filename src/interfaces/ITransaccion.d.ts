@@ -7,8 +7,8 @@ interface ITransaccion {
     tipo : 'recarga' | 'pago';
     monto : number;
     status : 'pendiente' | 'confirmada'
-    token_confirmacion?: string | null;
-    session_id?: string | null;
+    token_confirmacion: string | null;
+    session_Exp?: number | null;
     celular?: string | null;
 }
 

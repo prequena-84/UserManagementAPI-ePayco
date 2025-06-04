@@ -2,55 +2,44 @@
 import { generateToken } from '../utils/validacion-token'
 import ISR from '../class/class-router'
 import bodyParser from 'body-parser'
-import axios from 'axios'
-
+import consultaDocUsuario from '../functions/consulta-doc-Usuario'
+import consultaIdTransaccion from '../functions/consulta-id-transaccion'
+import modificacionTransaccion from '../functions/modificacioin-transaccion'
 import sendEmailToken from '../modules/envio-mail/envio-mail'
 
 // Importacion de typos e interfaces de TypeScript
 import type { TRequest,TResponse } from 'types/TRouter'
-
-// Importación del sservicio consulta del servicio de la base de datos
-const uriConsultaDocUsuario = process.env.URI_API_CONSULTA_DOC_USUARIOS || ''
-const uriConsultaIdTransaccion:string = process.env.URI_API_CONSULTA_ID_TRANSACCIONES || ''
-const uriModificarTransaccion =  process.env.URI_API_ACTUALIZAR_TRANSACCIONES || ''
+import type { IUsuario } from 'interfaces/IUsuario'
+import { ITransaccion } from 'interfaces/ITransaccion'
 
 const CR = new ISR(), Router = CR.Router()
-
 Router.use(bodyParser.json())
 
 Router.post('/', async ( req:TRequest, res:TResponse ) => {
     try {
-        const datoDocumento = req.body
-        if ( !datoDocumento.documento || !datoDocumento.idTransaccion ) res.status(400).json({ message: 'Datos incompletos' })
+        const datoDocumento = req.body, { documento, idTransaccion } = datoDocumento
 
-        const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {datoDocumento})    
-        const datosUsuario = await axios.post(uriConsultaDocUsuario, {datoDocumento})
-   
-        if ( datosTransaccion.data.data.usuario_doc === datoDocumento.documento && datosTransaccion.data.data.status === "pendiente" && datosTransaccion.data.data.tipo === "pago") {
+        if ( !documento || !idTransaccion ) res.status(400).json({ message: 'Datos incompletos' })
+        const datosUsuario:IUsuario = await consultaDocUsuario(datoDocumento)
+        const datosTransaccion: ITransaccion = await consultaIdTransaccion(datoDocumento)
+        const tokkenSesion = generateToken()
 
-            const tokkenSesion = generateToken()
-            datosTransaccion.data.data.token_confirmacion = tokkenSesion.token
-            datosTransaccion.data.data.session_Exp = tokkenSesion.timeExp
-            const responseRegSessionToken = await axios.post(uriModificarTransaccion, datosTransaccion.data.data )
-
-            const response = await sendEmailToken(
-                datosUsuario.data.data.email,
-                datosUsuario.data.data.nombre,
-                responseRegSessionToken.data.data.token_confirmacion,
-            )
-
+        if ( datosTransaccion.usuario_doc === documento && datosTransaccion.status === "pendiente" && datosTransaccion.tipo === "pago") {
+            datosTransaccion.token_confirmacion = tokkenSesion.token
+            datosTransaccion.session_Exp = tokkenSesion.timeExp
+            const { token_confirmacion } = await modificacionTransaccion(datosTransaccion) as ITransaccion;
+            
             res.status(200).json({ 
-                data:response,
+                data:await sendEmailToken(datosUsuario.email,datosUsuario.nombre,token_confirmacion),
                 message: 'Se ha enviado el mail con el token para validarlo'
             })
-
         } else {
+
             res.status(401).json({ message: 'No Autorizado, Error en los datos de la autorizacion' })
         }
-
     } catch(err) {
-        console.log(err)
-        res.status(500).json({ message: `se presento este error: ${err}` })
+        console.error(err)
+        res.status(500).json({ message: `Se presento este error: ${err}` })
     }
 })
 
