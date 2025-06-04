@@ -23,24 +23,32 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
         const datosUsuario = await axios.post(uriConsultaDocUsuario,{ datoDocumento })
         const datosTransaccion = await axios.post(uriConsultaIdTransaccion,{ datoDocumento })
 
-        if ( datosUsuario.data.data.saldo >= datosTransaccion.data.data.monto) {
+        if ( datosUsuario.data.data.documento === datosTransaccion.data.data.usuario_doc ) {
+            if ( datosUsuario.data.data.saldo >= datosTransaccion.data.data.monto  ) {
 
-            datosTransaccion.data.data.status = 'confirmada'
-            datosUsuario.data.data.saldo -= datosTransaccion.data.data.monto
+                datosTransaccion.data.data.status = 'confirmada'
+                datosUsuario.data.data.saldo -= datosTransaccion.data.data.monto
 
-            await axios.post(uriModificarUsuario, datosUsuario.data.data )
-            await axios.post(uriModificarTransaccion, datosTransaccion.data.data )
+                await axios.post(uriModificarUsuario, datosUsuario.data.data )
+                await axios.post(uriModificarTransaccion, datosTransaccion.data.data )
 
-            res.status(200).send({
-                data:null,
-                message: 'Se ha confirmado la Transaccion',
-            })
-            
+                res.status(200).send({
+                    data:null,
+                    message: 'Se ha confirmado la Transaccion',
+                })
+                
+            } else {
+
+                res.status(200).send({
+                    data:null,
+                    message: 'El saldo que tiene en la cuenta es insuficiente por favor recargue',
+                })
+            }
         } else {
 
             res.status(200).send({
                 data:null,
-                message: 'El saldo que tiene en la cuenta es insuficiente por favor recargue',
+                message: 'El numero de documento no coincide con el registrado en la transacción, por favor reviselo',
             })
         }
 
