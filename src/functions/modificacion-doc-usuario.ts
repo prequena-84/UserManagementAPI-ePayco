@@ -1,4 +1,6 @@
+import path from 'path'
 import type { IUsuario } from "interfaces/IUsuario"
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 const uriModificarTransaccion =  process.env.URI_API_ACTUALIZAR_TRANSACCIONES || ''
 
@@ -16,7 +18,7 @@ export default async function modificacionUsuario( datoUsuario:IUsuario ) {
         return data.data
 
     } catch(err) {
-        console.log(err)
+        console.error(err)
         return null
     }
 }

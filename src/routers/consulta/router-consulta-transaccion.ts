@@ -1,26 +1,22 @@
-import path from 'path'
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
-
-import axios from 'axios'
-
+import consultaTransacciones from '../../functions/consulta-transacciones'
+import type { ITransaccion } from 'interfaces/ITransaccion'
 import type { TRequest,TResponse } from 'types/TRouter'
 
-const uriTransaccion = process.env.URI_API_REPORTE_TRANSACCIONES || ''
 const CR = new routerInstancia(), Router = CR.Router()
 
 Router.use(bodyParser.json())
 
 Router.get('/', async ( _req:TRequest, res:TResponse ): Promise<void> => {
     try {
-        const response = await axios.get(uriTransaccion)
-        
+        const response: ITransaccion[] = await consultaTransacciones()
+
         res.status(200).send({
-            data:response.data.data,
-            message: response.data.message,
+            data:response,
+            message:'Se descargo los datos del Reporte',
         })
-        
+
     } catch(err) {
         res.status(500).send({
             data:null,

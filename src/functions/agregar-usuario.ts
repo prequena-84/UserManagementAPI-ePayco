@@ -2,12 +2,12 @@ import path from 'path'
 import type { IUsuario, } from "interfaces/IUsuario" 
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
-const uriConsultaDocUsuario = process.env.URI_API_CONSULTA_DOC_USUARIOS || ''
+const uriAgregarUsuario = process.env.URI_API_REGISTRO_USUARIO || ""
 
-export default async function consultaDocUsuario( datoDocumento:IUsuario ) {
+export default async function agregarUsuario( datoDocumento:IUsuario ) {
     try {
         
-        const response = await fetch(uriConsultaDocUsuario, {
+        const response = await fetch(uriAgregarUsuario, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

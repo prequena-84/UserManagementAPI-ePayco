@@ -2,16 +2,15 @@ import path from 'path'
 import type { ITransaccion } from "interfaces/ITransaccion"
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
-const uriModificarTransaccion =  process.env.URI_API_ACTUALIZAR_TRANSACCIONES || ''
+const uriConsultaTodosLosUsuarios = process.env.URI_API_CONSULTA_ALL_USUARIO || ""
 
-export default async function modificacionTransaccion( datoTransaccion:ITransaccion ): Promise<ITransaccion | null> {
+export default async function consultaUsuarios(): Promise<ITransaccion[]> {
     try {
-        const response = await fetch(uriModificarTransaccion, {
-            method: 'POST',
+        const response = await fetch(uriConsultaTodosLosUsuarios, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(datoTransaccion),
         })
 
         const data = await response.json()
@@ -21,6 +20,6 @@ export default async function modificacionTransaccion( datoTransaccion:ITransacc
 
     } catch(err) {
         console.error(err)
-        return null
+        return []
     }
 }

@@ -1,38 +1,27 @@
-import path from 'path'
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
-import axios from "axios"
+import consultaDocUsuario from '../../functions/consulta-doc-Usuario'
+import agregarTransaccion from '../../functions/agregar-transaccion'
+import modificarUsuario from   '../../functions/modificacion-doc-usuario'
 
 import type { ITransaccion } from 'interfaces/ITransaccion'
 import type { TRequest,TResponse } from 'types/TRouter'
 
 const CR = new routerInstancia(), Router = CR.Router()
 
-const uriAgregarTransaccion = process.env.URI_API_REGISTRO_TRANSACCIONES || ''
-const uriConsultaDocUsuario = process.env.URI_API_CONSULTA_DOC_USUARIOS || ''
-const uriModificarUsuario = process.env.URI_API_MODIFICACION_USUARIO || ''
-
 Router.use(bodyParser.json())
 
 Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
     try {
-        const datoTransaccion:ITransaccion = req.body.datoTransaccion
-        let respTransaccion = null
+        const 
+            datoTransaccion:ITransaccion = req.body.datoTransaccion,
+            { usuario_doc,tipo,celular,monto } = datoTransaccion,
+            datosUsuario = await consultaDocUsuario({documento:usuario_doc})
 
-        const datoDocumento = {
-            documento:datoTransaccion.usuario_doc,
-            celular:datoTransaccion.celular,
-        }
-    
-        const datosUsuario = await axios.post(uriConsultaDocUsuario, {
-            datoDocumento
-        })
+        if ( tipo === "recarga" ) {
 
-        if ( datoTransaccion.tipo === "recarga" ) {
-
-            if ( datoDocumento.celular === datosUsuario.data.data.celular ) {
+            if ( datosUsuario.celular === celular ) {
 
                 datoTransaccion.status = "confirmada"
             } else {            
@@ -42,34 +31,34 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
                 })
             }
 
-            respTransaccion = await axios.post(uriAgregarTransaccion, {
-                datoTransaccion
-            })  
+           const { id,status }: ITransaccion = await agregarTransaccion(datoTransaccion)
 
-            if ( respTransaccion.data.data.status === "confirmada" ) {
-                datosUsuario.data.data.saldo +=  datoTransaccion.monto
-                await axios.post(uriModificarUsuario, datosUsuario.data.data )
+            if ( status  === "confirmada" ) {
+                datosUsuario.saldo+= monto
+                await modificarUsuario(datosUsuario)
             }
 
         } else {
+            if ( datosUsuario.saldo >= monto ) {
 
-            if ( datosUsuario.data.data.saldo >= datoTransaccion.monto ) {
-                respTransaccion = await axios.post(uriAgregarTransaccion, {
-                    datoTransaccion
-                })  
+                const { id }: ITransaccion = await agregarTransaccion(datoTransaccion)
+
+                res.status(200).send({
+                    data: ,
+                    message:'Se ha registrado la transaccion sastifactoriamente',
+                })
+                
             } else {
+
                 res.status(403).send({
                     data:null,
                     message: 'Saldo insuficiente, por favor recarge',
                 })
             }
         }
-        
-        res.status(200).send({
-            data:respTransaccion?.data,
-            message: respTransaccion?.data.message,
-        })
 
+
+        
     } catch(err) {
         res.status(500).send({
             data:null,
