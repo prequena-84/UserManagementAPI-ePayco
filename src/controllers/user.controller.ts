@@ -17,9 +17,9 @@ Router.use(bodyParser.json())
 
 Router.post('/', async ( req:TRequest, res:TResponse ) => {
     try {
-        const datoDocumento = req.body, { documento, idTransaccion } = datoDocumento
+        const datoDocumento = req.body, { documento, id } = datoDocumento
 
-        if ( !documento || !idTransaccion ) res.status(400).json({ message: 'Datos incompletos' })
+        if ( !documento || !id ) res.status(400).json({ message: 'Datos incompletos' })
         const datosUsuario:IUsuario = await consultaDocUsuario(datoDocumento)
         const datosTransaccion: ITransaccion = await consultaIdTransaccion(datoDocumento)
         const tokkenSesion = generateToken()

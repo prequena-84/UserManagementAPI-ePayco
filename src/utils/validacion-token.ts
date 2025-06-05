@@ -1,9 +1,13 @@
 import path from 'path'
 import keyJWT from '../functions/private.key'
 import axios from 'axios'
-import type { IToken } from 'interfaces/IToken'
+
+import type { ITransaccion } from 'interfaces/ITransaccion'
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
-const uriConsultaIdTransaccion:string = process.env.URI_API_CONSULTA_ID_TRANSACCIONES || ''
+
+import consultaIdTransaccion from '../functions/consulta-id-transaccion'
+
+//const uriConsultaIdTransaccion:string = process.env.URI_API_CONSULTA_ID_TRANSACCIONES || ''
 
 interface ResponseToken {
     token:string;
@@ -17,14 +21,16 @@ const generateToken = (): ResponseToken => {
     }
 };
 
-// Ingresar la consulta a la base de datos
-const validateToken = async (token:string,datoDocumento:IToken): Promise<boolean> => {
+const validateToken = async (token:string, datoDocumento:ITransaccion): Promise<boolean> => {
     try {
         const timeActual = Date.now()
-        const datosTransaccion = await axios.post(uriConsultaIdTransaccion, {datoDocumento})
 
-        if ( datosTransaccion.data.data.token_confirmacion === token && timeActual < datosTransaccion.data.data.session_Exp ) return true
+        console.log('revison de validacoin de token', datoDocumento)
+        const { token_confirmacion,session_Exp } = await consultaIdTransaccion(datoDocumento)
+
+        if ( token_confirmacion === token && timeActual < session_Exp ) return true
         return false
+
     } catch( err ) {
         
         console.error('error en validateToken', err)

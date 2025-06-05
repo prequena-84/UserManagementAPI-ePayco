@@ -2,10 +2,10 @@ import type { TIdUsuario,TUsuario } from 'types/Tusuario'
 import { Document, Model } from 'mongoose'
 
 interface IUsuario {
-    documento:TUsuario;
-    nombre:string;
-    email:string;
-    celular:string
+    documento?:TUsuario;
+    nombre?:string;
+    email?:string;
+    celular?:string;
     saldo?:number;
 }
 

@@ -2,14 +2,14 @@ import type { TIdTransaccion } from 'types/TTransaccion'
 import { Document, Model } from 'mongoose'
 
 interface ITransaccion {
-    id:TIdTransaccion;
-    usuario_doc:string;
-    tipo : 'recarga' | 'pago';
-    monto : number;
-    status : 'pendiente' | 'confirmada'
-    token_confirmacion: string | null;
-    session_Exp?: number | null;
-    celular?: string | null;
+    id?:TIdTransaccion;
+    usuario_doc?:string;
+    tipo?:'recarga' | 'pago';
+    monto?:number;
+    status?:'pendiente' | 'confirmada'
+    token_confirmacion?:string;
+    session_Exp?:number;
+    celular?:string;
 }
 
 interface ITrasResp {
