@@ -3,7 +3,7 @@ import { configTransporter,configCuerpoEmail  } from '../../config/config-nodema
 
 const transporter = nodemailer.createTransport(configTransporter);
 
-const sendEmailToken = async (to: string, nombre: string, token: string | null) => {
+const sendEmailToken = async (to: string, nombre: string, token: string) => {
 
     const opcionesEmail = {
         from:configTransporter.auth?.user,

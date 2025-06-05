@@ -13,7 +13,6 @@ import type { TRequest,TResponse } from 'types/TRouter'
 
 // Instancia de la clase Servido y Router
 const CR = new routerInstancia(), Router = CR.Router()
-
 Router.use(bodyParser.json())
 
 // Importación de la descripcion del servicio

@@ -1,7 +1,6 @@
 interface IToken {
-    token: string;
-    documento?:string;
-    idTransaccion?: string;
+    token:string;
+    timeExp: number;
 }
 
 export type {

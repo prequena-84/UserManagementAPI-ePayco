@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
-import agregarUsuario from '../../functions/agregar-usuario'
+import agregarUsuario from '../../functions/usuario/agregar-usuario'
 import type { IUsuario } from 'interfaces/IUsuario'
 import type { TRequest,TResponse } from 'types/TRouter'
 

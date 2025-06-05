@@ -1,25 +1,22 @@
-import path from 'path'
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
+import consultaDocUsuario from '../../functions/usuario/consulta-doc-Usuario'
+import consultaIdTransaccion from '../../functions/transaccion/consulta-id-transaccion'
+import modificacionTransaccion from '../../functions/transaccion/modificacioin-transaccion'
+import modificacionUsuario from '../../functions/usuario/modificacion-doc-usuario'
 
 import type { IUsuario } from 'interfaces/IUsuario'
 import type { ITransaccion } from 'interfaces/ITransaccion'
 import type { TRequest,TResponse } from 'types/TRouter'
-
-import consultaDocUsuario from '../../functions/consulta-doc-Usuario'
-import consultaIdTransaccion from '../../functions/consulta-id-transaccion'
-import modificacionTransaccion from '../../functions/modificacioin-transaccion'
-import modificacionUsuario from '../../functions/modificacion-doc-usuario'
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 const CR = new routerInstancia(), Router = CR.Router()
 Router.use(bodyParser.json())
 
 Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
     try {
-        const datoDocumento: IUsuario | ITransaccion  = req.body
-        const datosUsuario = await consultaDocUsuario(datoDocumento), { documento,saldo } = datosUsuario
-        const datosTransaccion = await consultaIdTransaccion(datoDocumento), { usuario_doc,monto  } = datosTransaccion
+        const datoDocumento  = req.body
+        const datosUsuario:IUsuario = await consultaDocUsuario(datoDocumento), { documento,saldo }:IUsuario = datosUsuario
+        const datosTransaccion:ITransaccion = await consultaIdTransaccion(datoDocumento), { usuario_doc,monto  }:ITransaccion = datosTransaccion
 
         if ( documento === usuario_doc ) {
             if ( saldo >= monto  ) {
@@ -27,11 +24,11 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
                 datosTransaccion.status = 'confirmada'
                 datosUsuario.saldo -= monto
 
-                await modificacionTransaccion(datosUsuario)
-                await modificacionUsuario(datosTransaccion)
+                await modificacionUsuario(datosUsuario)
+                await modificacionTransaccion(datosTransaccion)
 
                 res.status(200).send({
-                    data:'Se ha confirmado la Transaccion',
+                    data:null,
                     message: 'Se ha confirmado la Transaccion',
                 })
             } else {

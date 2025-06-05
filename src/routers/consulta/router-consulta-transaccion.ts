@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
-import consultaTransacciones from '../../functions/consulta-transacciones'
+import consultaTransacciones from '../../functions/transaccion/consulta-transacciones'
 import type { ITransaccion } from 'interfaces/ITransaccion'
 import type { TRequest,TResponse } from 'types/TRouter'
 

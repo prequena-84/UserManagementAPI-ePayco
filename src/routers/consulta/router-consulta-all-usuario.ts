@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
-import consultaUsuarios from '../../functions//consulta-usuarios'
+import consultaUsuarios from '../../functions/usuario/consulta-usuarios'
 import type { IUsuario } from 'interfaces/IUsuario'
 import type { TRequest,TResponse } from 'types/TRouter'
 
@@ -19,7 +19,7 @@ Router.get('/', async ( _req:TRequest, res:TResponse ): Promise<void> => {
     } catch(err) {
         res.status(500).send({
             data:null,
-            message:`Error en el registro de datos: ${err}`,
+            message:`Error en la consulta de datos: ${err}`,
         })
     }
 })
