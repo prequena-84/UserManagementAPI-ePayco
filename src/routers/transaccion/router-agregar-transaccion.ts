@@ -1,10 +1,8 @@
 import bodyParser from 'body-parser'
 import routerInstancia from '../../class/class-router'
-
 import consultaDocUsuario from '../../functions/consulta-doc-Usuario'
 import agregarTransaccion from '../../functions/agregar-transaccion'
 import modificarUsuario from   '../../functions/modificacion-doc-usuario'
-
 import type { ITransaccion } from 'interfaces/ITransaccion'
 import type { TRequest,TResponse } from 'types/TRouter'
 
@@ -31,21 +29,29 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
                 })
             }
 
-           const { id,status }: ITransaccion = await agregarTransaccion(datoTransaccion)
+           const respData: ITransaccion = await agregarTransaccion(datoTransaccion)
 
-            if ( status  === "confirmada" ) {
-                datosUsuario.saldo+= monto
-                await modificarUsuario(datosUsuario)
+            if ( respData.status  === "confirmada" ) {
+                datosUsuario.saldo += monto
+
+                console.log('revision del saldo del usuario', datosUsuario)
+
+                console.log('revision de la respuesta de la modificacion del usuario',await modificarUsuario(datosUsuario))
             }
+
+            res.status(200).send({
+                data: respData,
+                message:`Se ha registrado la transaccion #${respData.id} sastifactoriamente`,
+            })
 
         } else {
             if ( datosUsuario.saldo >= monto ) {
 
-                const { id }: ITransaccion = await agregarTransaccion(datoTransaccion)
+                const respData: ITransaccion = await agregarTransaccion(datoTransaccion)
 
                 res.status(200).send({
-                    data: ,
-                    message:'Se ha registrado la transaccion sastifactoriamente',
+                    data: respData,
+                    message:`Se ha registrado la transaccion #${respData.id} sastifactoriamente`,
                 })
                 
             } else {
@@ -57,8 +63,6 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
             }
         }
 
-
-        
     } catch(err) {
         res.status(500).send({
             data:null,

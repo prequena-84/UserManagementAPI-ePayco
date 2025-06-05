@@ -5,7 +5,7 @@ interface ITransaccion {
     id?:TIdTransaccion;
     usuario_doc?:string;
     tipo?:'recarga' | 'pago';
-    monto:number;
+    monto?:number;
     status?:'pendiente' | 'confirmada'
     token_confirmacion?:string;
     session_Exp?:number;
