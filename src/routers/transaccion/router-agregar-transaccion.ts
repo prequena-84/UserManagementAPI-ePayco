@@ -30,8 +30,6 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
                 const respData: ITransaccion = await agregarTransaccion(datoTransaccion)
                 if ( respData.status  === "confirmada" ) datosUsuario.saldo += monto
 
-                console.log(datosUsuario)
-
                 await modificacionUsuario(datosUsuario)
 
                 res.status(200).send({
