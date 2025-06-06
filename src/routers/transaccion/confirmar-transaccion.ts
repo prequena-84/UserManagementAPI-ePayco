@@ -16,7 +16,7 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
     try {
         const datoDocumento  = req.body
         const datosUsuario:IUsuario = await consultaDocUsuario(datoDocumento), { documento,saldo }:IUsuario = datosUsuario
-        const datosTransaccion:ITransaccion = await consultaIdTransaccion(datoDocumento), { usuario_doc,monto  }:ITransaccion = datosTransaccion
+        const datosTransaccion:ITransaccion = await consultaIdTransaccion(datoDocumento), { usuario_doc,monto  }: ITransaccion = datosTransaccion
 
         if ( documento === usuario_doc ) {
             if ( saldo >= monto  ) {
@@ -38,7 +38,7 @@ Router.post('/', async ( req:TRequest, res:TResponse ): Promise<void> => {
                 })
             }
         } else {
-            res.status(200).send({
+            res.status(401).send({
                 data:null,
                 message: 'El numero de documento no coincide con el registrado en la transacción, por favor reviselo',
             })

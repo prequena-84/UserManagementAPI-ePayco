@@ -6,7 +6,7 @@ interface IUsuario {
     nombre:string;
     email:string;
     celular:string;
-    saldo:number;
+    saldo:numbe;
 }
 
 interface IUsuarioResp {
