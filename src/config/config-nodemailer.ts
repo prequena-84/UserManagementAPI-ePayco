@@ -20,7 +20,7 @@ const configCuerpoEmail = (nombre: string | undefined, token: string | undefined
     <h2 style="color: #333;">Hola ${nombre},</h2>
     <p>Tu código de verificación es:</p>
     <p style="font-size: 24px; font-weight: bold; color: #007BFF;">${token}</p>
-    <p>Este código es válido por los próximos 5 minutos.</p>
+    <p>Este código es válido por los próximos ${process.env.TIME_EXPIRE_OTP} minutos.</p>
     <hr />
     <p style="font-size: 12px; color: #999;">Si no solicitaste este código, puedes ignorar este mensaje.</p>
     <p style="font-size: 12px; color: #999;">Gracias,<br>El equipo de ePayco</p>
