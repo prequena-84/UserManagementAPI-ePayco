@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './modules/users/users.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({ 
+      //envFilePath: '.env.development', // ejemplo si quieres múltiples archivos .env como test, devlopment etc
+      isGlobal:true, // Esto hace que el ConfigService esté disponible en TODO el proyecto sin necesidad de exportarlo/importarlo manualmente.
+    }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
