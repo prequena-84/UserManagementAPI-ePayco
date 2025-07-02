@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionsModule } from './modules/transactions/transactions.module';
-import { OtpMiddlewareModule } from './middleware/otp.middleware.module';
+import { OtpAuthModule } from './common/auth/otp.module';
+import { TokenModule } from './common/token/token.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { OtpMiddlewareModule } from './middleware/otp.middleware.module';
     }),
     UsersModule,
     TransactionsModule,
-    OtpMiddlewareModule,
+    OtpAuthModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],
