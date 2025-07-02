@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionsModule } from './modules/transactions/transactions.module';
+import { OtpMiddlewareModule } from './middleware/otp.middleware.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
     }),
     UsersModule,
     TransactionsModule,
+    OtpMiddlewareModule,
   ],
   controllers: [AppController],
   providers: [AppService],
