@@ -15,11 +15,7 @@ export class OtpAuthController {
 
     @Post('send-OTP')
     async sendToken( @Body() body:IMailBody ) {
-        //console.log('revision de request', body) // llega correcto
         const { documentUser, idTransaction }:IMailBody = body;
-
-        //console.log('revision de la constantes', documentUser, idTransaction ) //llega correcto
-
         return await this.otpAuth.authOTP(documentUser,idTransaction)
     };
 };

@@ -1,27 +1,27 @@
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { IConfigNodeMailer } from "src/typescript/interfaces/email/email.interfaces"
 import type { TName } from 'src/typescript/types/users/user.type'
 import type { TToken } from 'src/typescript/types/token/token.types'
 
-export class MailOptions {
-    constructor( 
-        private readonly configService:ConfigService,
-    ) {}
+@Injectable()
+export class ConfigEmailService {
+    constructor( private readonly configService:ConfigService ) {};
 
     configTransporter():IConfigNodeMailer {
         return {
-            host: this.configService.get<string>('TIME_EXPIRE_OTP'),
-            port: this.configService.get<number>('CONFIG_PORT'),
-            secure:this.configService.get<boolean>('CONFIG_SECURE'),
+            host:String(this.configService.get<string>('CONFIG_HOST')),
+            port:Number(this.configService.get<number>('CONFIG_PORT')),
+            secure:this.configService.get<boolean>('CONFIG_SECURE') === true,
             auth: {
-                user:this.configService.get<string>('CONFIG_USER'),
-                pass:this.configService.get<string>('CONFIG_PASS'),
+                user:String(this.configService.get<string>('CONFIG_USER')),
+                pass:String(this.configService.get<string>('CONFIG_PASS')),
             },
             tls: {
-                rejectUnauthorized:this.configService.get<boolean>('CONFIG_REJECTUNAUTHORIZED'),
+                rejectUnauthorized:this.configService.get<boolean>('CONFIG_REJECTUNAUTHORIZED') === true,
             },
-        }
-    }
+        };
+    };
 
     configEmail(name:TName, token:TToken ): string {
         return `
@@ -34,6 +34,6 @@ export class MailOptions {
                 <p style="font-size: 12px; color: #999;">Si no solicitaste este código, puedes ignorar este mensaje.</p>
                 <p style="font-size: 12px; color: #999;">Gracias,<br>El equipo de ePayco</p>
             </div>
-        `
-    }
-}
+        `;
+    };
+};

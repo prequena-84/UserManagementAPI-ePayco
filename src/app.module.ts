@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { OtpAuthModule } from './common/auth/otp.module';
 import { TokenModule } from './common/token/token.module';
+import { EmailModule } from './config/email/email.module';
+import { SendModule } from './common/utils/email/send.email.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { TokenModule } from './common/token/token.module';
     TransactionsModule,
     OtpAuthModule,
     TokenModule,
+    EmailModule,
+    SendModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -14,10 +14,7 @@ export class TokenService {
         private readonly transactionsService: TransactionsService,
     ) {};
 
-    generateToken():IToken {   
-        
-        console.log( Date.now() + Number(this.configService.get<number>('TIME_EXPIRE_OTP')) * 60 * 1000 );
-        
+    generateToken():IToken {          
         return {
             token:generateKeyOTP(),
             timeExp:Date.now() + Number(this.configService.get<number>('TIME_EXPIRE_OTP')) * 60 * 1000,

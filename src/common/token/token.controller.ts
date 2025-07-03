@@ -7,7 +7,7 @@ import type { TIdTransaction } from 'src/typescript/types/transaction/transactio
 export class TokenController {
     constructor( private readonly tokenServices:TokenService ) {}
 
-    async validateToken( token:TToken, idTransaction:TIdTransaction ): Promise<boolean> {
+    async validate( token:TToken, idTransaction:TIdTransaction ): Promise<boolean> {
         return await this.tokenServices.validateToken( token,idTransaction );
     };
 };
