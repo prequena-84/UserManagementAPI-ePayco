@@ -17,11 +17,11 @@ export class EmailService {
             html: this.mailOptions.configEmail(name,token),
         };
 
-        try {
+        //try {
             const sendMail = await transporter.sendMail(opcionMail);       
             return `Se envio el mail con el token sastifactoriamente`;
-        } catch(err) {
-            return `No se envio el mail, ${err}`
-        };
+        //} catch(err) {
+            //return `No se envio el mail, ${err}`
+        //};
     };
 };
