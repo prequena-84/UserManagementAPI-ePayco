@@ -1,4 +1,4 @@
-import type { THost,TPort,Tsecure,TUser,TPass,TRejectUnauthorized } from "src/typescript/types/email/email.types";
+import type { THost,TPort,Tsecure,TUser,TPass,TRejectUnauthorized } from 'src/typescript/types/email/email.types'
 
 interface IConfigNodeMailer {
     host:THost | undefined;

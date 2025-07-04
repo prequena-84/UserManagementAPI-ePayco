@@ -1,6 +1,6 @@
 import { Controller, Body, Get, Post } from '@nestjs/common';
 import { AuthOtpServices } from './otp.service';
-import type { IMailBody } from 'src/typescript/interfaces/body/sendmail.body.types';
+import type { IMailBody } from 'src/typescript/interfaces/body/sendmail.body.interfaces';
 
 @Controller('UserManagementAPI/V1/Auth')
 export class OtpAuthController {
@@ -15,7 +15,7 @@ export class OtpAuthController {
 
     @Post('send-OTP')
     async sendToken( @Body() body:IMailBody ) {
-        const { documentUser, idTransaction }:IMailBody = body;
-        return await this.otpAuth.authOTP(documentUser,idTransaction)
+        const { document, id }:IMailBody = body;
+        return await this.otpAuth.authOTP(document, id);
     };
 };

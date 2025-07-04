@@ -6,7 +6,7 @@ import { TokenModule } from '../token/token.module';
 import { AuthOtpServices } from './otp.service';
 import { OtpAuthController } from './otp.controller';
 import { EmailModule } from 'src/config/email/email.module';
-import { EmailService } from '../utils/email/email.service';
+import { EmailService } from '../utils/email/send.email.service';
 
 @Module({
   imports:[
@@ -18,13 +18,11 @@ import { EmailService } from '../utils/email/email.service';
   ],
   providers: [
     AuthOtpServices,
-    //TokenService,
     EmailService,
   ],
   controllers: [OtpAuthController],
   exports:[
     AuthOtpServices,
-    //TokenService,
   ],
 })
 export class OtpAuthModule {};

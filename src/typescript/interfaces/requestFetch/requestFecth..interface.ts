@@ -1,4 +1,4 @@
-import type { TMessageText } from "src/typescript/types/response/response.type"
+import type { TMessageText } from 'src/typescript/types/response/response.type'
 
 interface IFecth<T> {
     data: T,

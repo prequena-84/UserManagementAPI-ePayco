@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
@@ -8,6 +8,7 @@ import { OtpAuthModule } from './common/auth/otp.module';
 import { TokenModule } from './common/token/token.module';
 import { EmailModule } from './config/email/email.module';
 import { SendModule } from './common/utils/email/send.email.module';
+import { AuthMiddleware } from './core/middleware/auth.middleware';
 
 @Module({
   imports: [
@@ -25,4 +26,12 @@ import { SendModule } from './common/utils/email/send.email.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {};
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+    .apply(AuthMiddleware)
+    .forRoutes(
+      {path:'UserManagementAPI/V1/transactions/confirmation/', method: RequestMethod.POST},
+    );
+  };
+};

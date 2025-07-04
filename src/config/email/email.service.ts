@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { IConfigNodeMailer } from "src/typescript/interfaces/email/email.interfaces"
-import type { TName } from 'src/typescript/types/users/user.type'
-import type { TToken } from 'src/typescript/types/token/token.types'
+import type { IConfigNodeMailer } from 'src/typescript/interfaces/email/email.interfaces';
+import type { TName } from 'src/typescript/types/users/user.type';
+import type { TToken } from 'src/typescript/types/token/token.types';
 
 @Injectable()
 export class ConfigEmailService {

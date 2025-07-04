@@ -11,5 +11,4 @@ export class AppController {
       message:this.appService.welcome('Bienvenidos a la API de Servicios UserManagement Epayco DEMO 2025'),
     };
   };
-  
 };

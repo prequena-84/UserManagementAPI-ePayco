@@ -1,4 +1,4 @@
-import type { TDocument } from "../users/user.type";
+import type { TDocument } from '../users/user.type'
 
 type TIdTransaction = string;
 type TUserDocument = TDocument;

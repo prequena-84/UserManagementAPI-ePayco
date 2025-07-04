@@ -1,6 +1,6 @@
-import type { ITransaction } from "../transaction/transaction.interfaces";
-import type { IUser } from "../users/user.interfaces";
-import type { TMessageText } from "src/typescript/types/response/response.type";
+import type { ITransaction } from '../transaction/transaction.interfaces'
+import type { IUser } from '../users/user.interfaces'
+import type { TMessageText } from 'src/typescript/types/response/response.type'
 
 interface IReport extends ITransaction {
     User:IUser;

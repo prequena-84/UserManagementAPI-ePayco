@@ -1,14 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UsersService } from '../users/users.service';
 import requestFecth from 'src/common/utils/fetch.utils';
 
 import type { ITransaction } from 'src/typescript/interfaces/transaction/transaction.interfaces';
 import type { IResponseTransaction } from 'src/typescript/interfaces/response/response-transaction';
 import type { TIdTransaction } from 'src/typescript/types/transaction/transaction.type';
+import type { TDocument } from 'src/typescript/types/users/user.type';
+import type { IUser } from 'src/typescript/interfaces/users/user.interfaces';
+import type { IConfirmationResponse } from 'src/typescript/interfaces/response/response-confirmation';
 
 @Injectable()
 export class TransactionsService {
-    constructor( private configService: ConfigService ) {};
+    constructor( 
+        private readonly userService:UsersService,
+        private readonly configService: ConfigService, 
+    ) {};
 
     welcomeAPI( text:string ): string {
         return text;
@@ -51,6 +58,25 @@ export class TransactionsService {
         return {
             data:response.data,
             message:response.message,
+        };
+    };
+
+    async transactionConfirmation(document:TDocument, id:TIdTransaction):Promise<IConfirmationResponse> {
+        const dataUser:IUser = await this.userService.userIdGet(document).then( resp => resp.data as IUser );
+        const dataTransaction:ITransaction = await this.transactionIdGet(id).then ( resp => resp.data as ITransaction);
+
+        if ( dataUser.document !== dataTransaction.userDocument ) throw new UnauthorizedException('El numero de documento no coincide con el registrado en la transacción, por favor reviselo');
+        if ( dataUser.balance < dataTransaction.amount ) throw new UnauthorizedException('El saldo que tiene en la cuenta es insuficiente por favor recargue');
+
+        dataTransaction.status = 'confirmada';
+        dataUser.balance -= dataTransaction.amount;
+
+        await this.transactionIdSet(dataTransaction.id, dataTransaction);
+        await this.userService.userIdSet(dataUser.document, dataUser);
+        
+        return {
+            data:null,
+            message:'Se ha confirmado la Transacción sastifactoriamente',
         };
     };
 };

@@ -21,7 +21,7 @@ export class EmailService {
             const sendMail = await transporter.sendMail(opcionMail);       
             return `Se envio el mail con el token sastifactoriamente`;
         } catch(err) {
-            return `ocurrio este error : ${err}`
+            return `No se envio el mail, ${err}`
         };
     };
 };
