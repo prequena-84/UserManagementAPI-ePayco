@@ -9,6 +9,7 @@ import type { TIdTransaction } from 'src/typescript/types/transaction/transactio
 import type { TDocument } from 'src/typescript/types/users/user.type';
 import type { IUser } from 'src/typescript/interfaces/users/user.interfaces';
 import type { IConfirmationResponse } from 'src/typescript/interfaces/response/response-confirmation';
+import type { IReport, IResponseReport } from 'src/typescript/interfaces/response/response-report';
 
 @Injectable()
 export class TransactionsService {
@@ -38,12 +39,23 @@ export class TransactionsService {
     };
 
     async transactionAdd( data:ITransaction ):Promise<IResponseTransaction> {
+        
+        console.log(data)
+        
+        const dataUser:IUser = await requestFecth<IUser>(`${String(this.configService.get<string>('URI_GET_USERID'))}/${data.userDocument}`, "GET").then( resp => resp.data as IUser );
+        console.log(dataUser);
+
+        dataUser.balance += Number(data.amount);
+        console.log(dataUser);
+
         const response = await requestFecth<ITransaction | ITransaction[]>(String( this.configService.get<string>('URI_ADD_TRANSACTION') ),"POST", data);
         return {
             data:response.data,
             message:response.message,
         };
     };
+
+    // Quede Pendiente realizar un cambio en el en el registro de trasancciones ya que falto agregar el saldo que se agrega sin confirmación
 
     async transactionIdSet( id:TIdTransaction, data:ITransaction ): Promise<IResponseTransaction> {
         const response = await requestFecth<ITransaction | ITransaction[]>(`${String(this.configService.get<string>('URI_SET_TRANSACTIONID'))}/${id}`,"PATCH", data);
@@ -77,6 +89,14 @@ export class TransactionsService {
         return {
             data:null,
             message:'Se ha confirmado la Transacción sastifactoriamente',
+        };
+    };
+
+    async transactionReport():Promise<IResponseReport> {
+        const response = await requestFecth<IReport>( String(this.configService.get<string>('URI_REPORT_TRANSACTION')) );
+        return {
+            data:response.data,
+            message:response.message,
         };
     };
 };

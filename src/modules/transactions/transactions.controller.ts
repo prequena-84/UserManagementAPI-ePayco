@@ -36,13 +36,18 @@ export class TransactionsController {
         return this.transactionService.transactionConfirmation(document,id);
     };
 
-    @Patch(':id')
+    @Patch('set/:id')
     async setIdTransaction( @Param('id') id:TIdTransaction, @Body() body:ITransaction ) {
         return await this.transactionService.transactionIdSet(id,body);
     };
 
-    @Delete(':id')
+    @Delete('delete/:id')
     async deleteTransaction( @Param('id') id:TIdTransaction ) {
         return await this.transactionService.transactionDelete(id);
+    };
+
+    @Get('report')
+    async reportTransaction() {
+        return await this.transactionService.transactionReport();
     };
 };

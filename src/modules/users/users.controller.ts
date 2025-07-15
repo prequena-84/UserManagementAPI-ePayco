@@ -32,13 +32,13 @@ export class UsersController {
         return response;
     };
 
-    @Patch(':id')
+    @Patch('set/:id')
     async setIdUsers( @Param('id') id:TDocument, @Body() body:IUser ) {
         const response = await this.usersService.userIdSet(id, body);
         return response;
     };
 
-    @Delete(':id')
+    @Delete('delete/:id')
     async deleteUsers( @Param('id') id:TDocument ) {
         const response = await  this.usersService.userDelete(id);
         return response;
