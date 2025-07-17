@@ -39,14 +39,11 @@ export class TransactionsService {
     };
 
     async transactionAdd( data:ITransaction ):Promise<IResponseTransaction> {
-        
-        console.log(data)
-        
-        const dataUser:IUser = await requestFecth<IUser>(`${String(this.configService.get<string>('URI_GET_USERID'))}/${data.userDocument}`, "GET").then( resp => resp.data as IUser );
-        console.log(dataUser);
-
-        dataUser.balance += Number(data.amount);
-        console.log(dataUser);
+        if ( data.type === "recarga" && data.amount > 0 ) {
+            const dataUser:IUser = await requestFecth<IUser>(`${String(this.configService.get<string>('URI_GET_USERID'))}/${data.userDocument}`, "GET").then( resp => resp.data as IUser );
+            dataUser.balance += Number(data.amount);
+            await requestFecth<IUser>( `${String(this.configService.get<string>('URI_UPDATE_USER'))}/${data.userDocument}`, "PATCH", dataUser ).catch( err => console.log('error en la actualiazión de los datos del usuario',err) );   
+        };
 
         const response = await requestFecth<ITransaction | ITransaction[]>(String( this.configService.get<string>('URI_ADD_TRANSACTION') ),"POST", data);
         return {
@@ -54,8 +51,6 @@ export class TransactionsService {
             message:response.message,
         };
     };
-
-    // Quede Pendiente realizar un cambio en el en el registro de trasancciones ya que falto agregar el saldo que se agrega sin confirmación
 
     async transactionIdSet( id:TIdTransaction, data:ITransaction ): Promise<IResponseTransaction> {
         const response = await requestFecth<ITransaction | ITransaction[]>(`${String(this.configService.get<string>('URI_SET_TRANSACTIONID'))}/${id}`,"PATCH", data);
