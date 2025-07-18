@@ -11,7 +11,11 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter())
 
   app.enableCors({
-    origin:'http://localhost:5173',
+    origin:[
+      // Se agregan las Excepciones de los Endpoint que realizan la peticiones, aqui se pueden configurar las API que pueden ofrecer datos.
+      'http://localhost:5173',
+      'http://localhost:4173',
+    ],
     methods:'GET,HEAD,PUT,PATCH,POST,DELETE',
     Credentials:false,   
   })
