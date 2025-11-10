@@ -1,6 +1,16 @@
-import type { IUser } from "./user.interfaces";
+import type { IUser } from './user.interfaces'
 
-export interface IResponseUser {
-    data?: IUser | IUser[] | null | undefined;
-    message?: string | null | undefined;
+interface IResponseUser {
+    data: IUser;
+    message?: string;
+}
+
+interface IResponseUsers {
+    data: IUser[];
+    message?: string;
+}
+
+export type {
+    IResponseUser,
+    IResponseUsers,
 }

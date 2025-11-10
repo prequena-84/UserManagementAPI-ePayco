@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { TokenService } from 'src/common/token/token.service';
-import { ITransaction } from 'src/typescript/interfaces/transaction/transaction.interfaces';
+import { ITransaction } from 'src/modules/transactions/interfaces/types/transaction.interfaces';
 import type { TToken } from 'src/typescript/types/token/token.types';
 
 @Injectable()

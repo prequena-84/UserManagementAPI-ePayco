@@ -5,7 +5,7 @@ import { EmailService } from '../utils/email/send.email.service';
 import { TokenService } from '../token/token.service';
 
 import type { IUser } from 'src/modules/users/interfaces/types/user.interfaces';
-import type { ITransaction } from 'src/typescript/interfaces/transaction/transaction.interfaces';
+import type { ITransaction } from 'src/modules/transactions/interfaces/types/transaction.interfaces';
 import type { IToken } from 'src/typescript/interfaces/token/token.interfaces';
 import type { TDocument } from 'src/typescript/types/users/user.type';
 import type { TIdTransaction } from 'src/typescript/types/transaction/transaction.type';

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import requestFecth from 'src/common/utils/fetch.utils';
 import type { IUser } from 'src/modules/users/interfaces/types/user.interfaces';
-import type { IResponseUser } from 'src/typescript/interfaces/response/response-user.interfaces';
+import type { IResponseUser,IResponseUsers } from 'src/modules/users/interfaces/types/response-users.interfaces';
 
 @Injectable()
 export class UsersRepository {
@@ -12,8 +12,8 @@ export class UsersRepository {
         return text;
     };
 
-   async findAllUsers(): Promise<IResponseUser> {
-        return requestFecth<IUser | IUser[]>( String(this.configService.get<string>('URI_USERS')) );
+   async findAllUsers(): Promise<IResponseUsers> {
+        return requestFecth<IUser[]>( String(this.configService.get<string>('URI_USERS')) );
     };
 
     async findUserById( document:number ): Promise<IResponseUser> {

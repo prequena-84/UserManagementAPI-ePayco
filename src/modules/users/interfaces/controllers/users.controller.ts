@@ -4,7 +4,7 @@ import { DecodeBase64Params } from 'src/common/pipes/decode-base64.params.pipe';
 import { DecodeBase64Pipe } from 'src/common/pipes/decode-base64.pipe';
 import { UsersDTO } from '../dtos/create.users.dto';
 
-import type { IResponseUser } from 'src/typescript/interfaces/response/response-user.interfaces';
+import type { IResponseUser, IResponseUsers } from 'src/modules/users/interfaces/types/response-users.interfaces';
 
 @Controller('api/v1/service/users')
 export class UsersController {
@@ -18,7 +18,7 @@ export class UsersController {
     };
 
     @Get()
-    async getUsers(): Promise<IResponseUser> {
+    async getUsers(): Promise<IResponseUsers> {
         try {
             const { data, message } = await this.usersRepository.findAllUsers();
             return {

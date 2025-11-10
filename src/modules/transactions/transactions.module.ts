@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from '../users/users.module';
-import { TransactionsController } from './transactions.controller';
-import { TransactionsService } from './transactions.service';
+import { TransactionsController } from './interfaces/controller/transactions.controller';
+import { TransactionsRepository } from './infrastructure/repositories/transactions.repository';
 
 @Module({
   imports:[
     UsersModule,
   ],
-  providers: [TransactionsService],
+  providers: [TransactionsRepository],
   controllers: [TransactionsController],
-  exports:[TransactionsService],
+  exports:[TransactionsRepository],
 })
 export class TransactionsModule {};

@@ -4,7 +4,7 @@ import { TransactionsService } from 'src/modules/transactions/transactions.servi
 import generateKeyOTP from '../utils/generate.key.otp';
 import type { TIdTransaction } from 'src/typescript/types/transaction/transaction.type'
 import type { IToken } from 'src/typescript/interfaces/token/token.interfaces'
-import type { ITransaction } from 'src/typescript/interfaces/transaction/transaction.interfaces'
+import type { ITransaction } from 'src/modules/transactions/interfaces/types/transaction.interfaces'
 import type { TToken } from 'src/typescript/types/token/token.types'
 
 @Injectable()
