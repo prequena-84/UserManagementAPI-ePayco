@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { IConfigNodeMailer } from 'src/typescript/interfaces/email/email.interfaces';
-import type { TName } from 'src/typescript/types/users/user.type';
-import type { TToken } from 'src/typescript/types/token/token.types';
+
+import type { IConfigNodeMailer } from 'src/config/email/interfaces/types/email.interfaces';
 
 @Injectable()
-export class ConfigEmailService {
+export class ConfigEmailRepository {
     constructor( private readonly configService:ConfigService ) {};
 
     configTransporter():IConfigNodeMailer {
@@ -23,7 +22,7 @@ export class ConfigEmailService {
         };
     };
 
-    configEmail(name:TName, token:TToken ): string {
+    configEmail(name:string, token:string ): string {
         return `
             <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #eaeaea; padding: 20px; border-radius: 8px;">
                 <h2 style="color: #333;">Hola ${name},</h2>

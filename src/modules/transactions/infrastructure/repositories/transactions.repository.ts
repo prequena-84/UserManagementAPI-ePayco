@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersRepository } from 'src/modules/users/infrastructure/repositories/users.repositories';
-import requestFecth from 'src/common/utils/fetch.utils';
+import requestFecth from 'src/common/utils/fetch/fetch.utils';
 
 import type { ITransaction } from 'src/modules/transactions/interfaces/types/transaction.interfaces';
 import type { IResponseTransaction, IResponseTransactions } from 'src/modules/transactions/interfaces/types/response-transaction.interfaces';

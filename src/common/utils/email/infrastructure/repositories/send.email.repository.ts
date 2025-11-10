@@ -1,13 +1,13 @@
 import * as nodemailer from 'nodemailer'
 import { Injectable } from '@nestjs/common';
-import { ConfigEmailService } from 'src/config/email/email.service';
-import type { TName, TEmail } from 'src/typescript/types/users/user.type'
-import type { TToken } from 'src/typescript/types/token/token.types'
+import { ConfigEmailRepository } from 'src/config/email/infrastructure/repositories/email.repository';
 
 @Injectable()
-export class EmailService {
-    constructor( private readonly mailOptions:ConfigEmailService ) {};
-    async send(to:TEmail, name:TName, token:TToken ): Promise<string> {
+export class EmailRepository {
+    constructor( 
+        private readonly mailOptions:ConfigEmailRepository, 
+    ) {};
+    async send(to:string, name:string, token:string ): Promise<string> {
         const transporter = nodemailer.createTransport(this.mailOptions.configTransporter());
         const opcionMail = {
             from: this.mailOptions.configTransporter().auth.user,

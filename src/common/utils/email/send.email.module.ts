@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { ConfigEmailService } from 'src/config/email/email.service';
-import { EmailService } from './send.email.service';
-import { EmailController } from './send.email.controller';
+import { ConfigEmailRepository } from 'src/config/email/infrastructure/repositories/email.repository';
+import { EmailRepository } from './infrastructure/repositories/send.email.repository';
+import { EmailController } from './interfaces/controller/send.email.controller';
 
 @Module({
   providers: [
-    EmailService,
-    ConfigEmailService,
+    EmailRepository,
+    ConfigEmailRepository,
   ],
   controllers: [EmailController],
   exports:[
-    EmailService,
-    ConfigEmailService,
+    EmailRepository,
+    ConfigEmailRepository,
   ],
 })
 export class SendModule {};

@@ -1,7 +1,7 @@
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 
-import type { TUri,THeaders,TMethod } from 'src/typescript/types/requestFetch/requestFecth..type'
-import type { IFecth } from 'src/typescript/interfaces/requestFetch/requestFecth.interface'
+import type { TUri, THeaders, TMethod } from 'src/common/utils/fetch/request-fecth.type'
+import type { IFecth } from 'src/common/utils/fetch/request-fecth.interface'
 
 export default async function requestFecth<TResponse, TRequestBody = TResponse> ( 
     uri:TUri, 

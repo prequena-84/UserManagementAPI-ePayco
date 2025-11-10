@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import requestFecth from 'src/common/utils/fetch.utils';
+import requestFecth from 'src/common/utils/fetch/fetch.utils';
 import type { IUser } from 'src/modules/users/interfaces/types/user.interfaces';
 import type { IResponseUser,IResponseUsers } from 'src/modules/users/interfaces/types/response-users.interfaces';
 
