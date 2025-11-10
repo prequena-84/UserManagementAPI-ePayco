@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/infrastructure/repositories/users.repositories';
 import requestFecth from 'src/common/utils/fetch.utils';
 
 import type { ITransaction } from 'src/typescript/interfaces/transaction/transaction.interfaces';
 import type { IResponseTransaction } from 'src/typescript/interfaces/response/response-transaction';
 import type { TIdTransaction } from 'src/typescript/types/transaction/transaction.type';
 import type { TDocument } from 'src/typescript/types/users/user.type';
-import type { IUser } from 'src/typescript/interfaces/users/user.interfaces';
+import type { IUser } from 'src/modules/users/interfaces/types/user.interfaces';
 import type { IConfirmationResponse } from 'src/typescript/interfaces/response/response-confirmation';
 import type { IReport, IResponseReport } from 'src/typescript/interfaces/response/response-report';
 

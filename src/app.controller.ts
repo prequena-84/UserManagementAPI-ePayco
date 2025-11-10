@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller()
+@Controller('api/v1/service/client/welcome')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('UserManagementAPI/V1')
+  @Get()
   getWelcome() {
     return {
       message:this.appService.welcome('Bienvenidos a la API de Servicios UserManagement Epayco DEMO 2025'),

@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from 'src/modules/users/users.service';
+import { UsersService } from 'src/modules/users/infrastructure/repositories/users.repositories';
 import { TransactionsService } from 'src/modules/transactions/transactions.service';
 import { EmailService } from '../utils/email/send.email.service';
 import { TokenService } from '../token/token.service';
 
-import type { IUser } from 'src/typescript/interfaces/users/user.interfaces';
+import type { IUser } from 'src/modules/users/interfaces/types/user.interfaces';
 import type { ITransaction } from 'src/typescript/interfaces/transaction/transaction.interfaces';
 import type { IToken } from 'src/typescript/interfaces/token/token.interfaces';
 import type { TDocument } from 'src/typescript/types/users/user.type';

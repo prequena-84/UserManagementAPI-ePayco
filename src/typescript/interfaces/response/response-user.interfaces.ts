@@ -1,11 +1,7 @@
-import type { IUser } from '../users/user.interfaces'
+import type { IUser } from '../../../modules/users/interfaces/types/user.interfaces'
 import type { TMessageText } from 'src/typescript/types/response/response.type'
 
-interface IResponseUser {
-    data?: IUser | IUser[] | null | undefined;
-    message?: TMessageText | null | undefined;
-}
-
-export type {
-    IResponseUser,
+export interface IResponseUser {
+    data: IUser | IUser[];
+    message?: string;
 }
