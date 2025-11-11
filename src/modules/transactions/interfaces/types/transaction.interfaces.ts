@@ -1,5 +1,5 @@
 export interface ITransaction {
-    id: string;
+    id?: string;
     userDocument: number;
     type: 'recarga' | 'pago';
     amount: number;

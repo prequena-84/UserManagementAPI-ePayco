@@ -32,4 +32,5 @@
 
   networks:
     ePayco-network:
-      driver: bridge
+      ##driver: bridge
+      external: true

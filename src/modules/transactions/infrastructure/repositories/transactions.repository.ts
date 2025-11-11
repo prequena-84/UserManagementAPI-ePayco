@@ -52,14 +52,14 @@ export class TransactionsRepository {
 
     async updateTransactionId( id:string, data:ITransaction ): Promise<IResponseTransaction> {
         return requestFecth<ITransaction> (
-            `${String(this.configService.get<string>('URI_SET_TRANSACTIONID'))}/${id}`,
+            `${String(this.configService.get<string>('URI_TRANSACTIONS'))}/${id}`,
             "PATCH", 
             data
         );
     };
 
     async deleteTransaction( id:string ): Promise<IResponseTransaction> {
-        return requestFecth<ITransaction>(`${String(this.configService.get<string>('URI_SET_TRANSACTIONID'))}/${id}`,"DELETE");
+        return requestFecth<ITransaction>(`${String(this.configService.get<string>('URI_TRANSACTIONS'))}/${id}`,"DELETE");
     };
 
     async transactionConfirmation(document:number, id:string): Promise<IResponseConfirmation> {
@@ -75,7 +75,7 @@ export class TransactionsRepository {
         transactions.data.status = 'confirmada';
         users.data.balance = (users.data.balance ?? 0 ) + transactions.data.amount;
 
-        await this.updateTransactionId(transactions.data.id, transactions.data);
+        await this.updateTransactionId(transactions.data.id ?? '', transactions.data);
         await this.userRepository.updateUserID(users.data.document, users.data);
 
         return {
@@ -84,6 +84,6 @@ export class TransactionsRepository {
     };
 
     async transactionReport():Promise<IResponseReport> {
-        return requestFecth<IReport[]>( String(this.configService.get<string> ('URI_REPORT_TRANSACTIONS')) );
+        return requestFecth<IReport[]>( String(this.configService.get<string>('URI_REPORT_TRANSACTIONS')) );
     };
 };

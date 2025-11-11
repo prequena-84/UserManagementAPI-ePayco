@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { UsersRepository } from 'src/modules/users/infrastructure/repositories/users.repositories';
 import { TransactionsRepository } from 'src/modules/transactions/infrastructure/repositories/transactions.repository';
-import { EmailService } from '../../../utils/email/infrastructure/repositories/send.email.repository';
+import { EmailRepository } from 'src/common/utils/email/infrastructure/repositories/send.email.repository';
 import { TokenService } from '../../../token/infrastructure/repositories/token.repository';
 
 import type { IResponseOtp } from '../../interfaces/types/response-otp.interfaces';
@@ -12,7 +12,7 @@ export class AuthOtpRepository {
         private readonly usersRepository:UsersRepository,
         private readonly transactionsRepository:TransactionsRepository,
         private readonly otpAUTH:TokenService,
-        private readonly mailService:EmailService,
+        private readonly mailRepository:EmailRepository,
     ) {};
 
     welcomeAPI( text:string ): string {
@@ -34,11 +34,11 @@ export class AuthOtpRepository {
         if ( transactions.userDocument === document && transactions.status === 'pendiente' && transactions.type === 'pago' && transactions.amount <= Number(users.balance) ) {
             
             transactions.tokenConfirmation = token; transactions.sessionExp = timeExp;
-            const { tokenConfirmation }  = (await this.transactionsRepository.updateTransactionId(transactions.id, transactions)).data;
+            const { tokenConfirmation }  = (await this.transactionsRepository.updateTransactionId(transactions.id ?? '', transactions)).data;
 
             return {
                 data:null,
-                message:await this.mailService.send(users.email, users.name, tokenConfirmation),
+                message:await this.mailRepository.send(users.email, users.name, tokenConfirmation as string),
             };
         };
 

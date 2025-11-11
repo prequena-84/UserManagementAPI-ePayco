@@ -14,7 +14,7 @@ export class AuthMiddleware implements NestMiddleware {
     
     if (!authHeader) throw new UnauthorizedException('Token requerido');
     const token:string = authHeader.split(' ')[1];
-    const response:boolean = await this.tokenService.validateToken(token, id);
+    const response:boolean = await this.tokenService.validateToken(token, id ?? '');
 
     if ( !response ) throw new UnauthorizedException('Token invalido');
     next();

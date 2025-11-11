@@ -15,18 +15,20 @@ export default async function requestFecth<TResponse, TRequestBody = TResponse> 
 
     if ( !uri ) throw new BadRequestException('URI no encontrada');
     if ( token ) headers["Authorization"] = `Bearer ${token}`;
-    
+
     const response = await fetch(uri, {
         method,
         headers,
         body: method === 'GET' ? undefined : JSON.stringify(body),
-    })
+    });
 
     if ( !response.ok ) throw new InternalServerErrorException('Error en la red o la solicitud falló')
     const data = await response.json()
 
-    return {
+    return data;
+
+    /*return {
         data,
         message:data.message,
-    };
+    };*/
 };

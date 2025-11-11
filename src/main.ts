@@ -7,7 +7,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter());
   const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
-  app.enableCors({
+    app.enableCors({
     origin:allowedOrigins,
     credentials: false,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

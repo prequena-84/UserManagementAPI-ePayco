@@ -13,7 +13,7 @@ export class UsersRepository {
     };
 
    async findAllUsers(): Promise<IResponseUsers> {
-        return requestFecth<IUser[]>( String(this.configService.get<string>('URI_USERS')) );
+        return requestFecth<IUser[]>( String(this.configService.get<string>('URI_USERS')));
     };
 
     async findUserById( document:number ): Promise<IResponseUser> {

@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsNumber, IsOptional, IsIn } from "class-validato
 export class TransactionsDTO {
     @IsString()
     @IsNotEmpty()
-    id:string
+    id?:string
 
     @IsNumber()
     @IsNotEmpty()

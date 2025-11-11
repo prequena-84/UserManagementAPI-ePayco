@@ -1,7 +1,5 @@
 import { Body, Controller, Get, Param, Post, Delete, Patch, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { UsersRepository } from '../../infrastructure/repositories/users.repositories';
-import { DecodeBase64Params } from 'src/common/pipes/decode-base64.params.pipe';
-import { DecodeBase64Pipe } from 'src/common/pipes/decode-base64.pipe';
 import { UsersDTO } from '../dtos/create.users.dto';
 
 import type { IResponseUser, IResponseUsers } from 'src/modules/users/interfaces/types/response-users.interfaces';
@@ -20,56 +18,37 @@ export class UsersController {
     @Get()
     async getUsers(): Promise<IResponseUsers> {
         try {
-            const { data, message } = await this.usersRepository.findAllUsers();
-            return {
-                data,
-                message,
-            };
+            return this.usersRepository.findAllUsers();
         } catch(err) {
-            console.error('Error en getUsers()', err);
-            throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');
-        };
-    };
-
-    @Get(':document')
-    async getIdUsers( @Param('document', DecodeBase64Params) document:number): Promise<IResponseUser> {
-        try {
-            const { data, message } = await this.usersRepository.findUserById(document);
-            return {
-                data,
-                message,
-            };
-        } catch(err)  {
             console.error('Error en getIdUsers()', err);
-            throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');
+            throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');  
         };
     };
 
     @Post()
-    async addUsers( @Body( new DecodeBase64Pipe() ) dto:UsersDTO ): Promise<IResponseUser> {
+    async addUsers( @Body() dto:UsersDTO ): Promise<IResponseUser> {
         try {
-            const { data, message } = await this.usersRepository.createUser(dto);
-            return {
-                data,
-                message,
-            };
+            return this.usersRepository.createUser(dto);
         } catch(err) {
             console.error('Error en addUsers()', err);
             throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');
         };
     };
 
-    @Patch(':id')
-    async setIdUsers(
-        @Param('id', DecodeBase64Params) id:number, 
-        @Body(new DecodeBase64Pipe()) dto:UsersDTO, 
-    ): Promise<IResponseUser> {
+    @Get(':id')
+    async getIdUsers( @Param('id') id:number): Promise<IResponseUser> {
         try {
-            const { data, message } = await this.usersRepository.updateUserID(id, dto);
-            return {
-                data,
-                message,
-            };
+            return this.usersRepository.findUserById(id);
+        } catch(err)  {
+            console.error('Error en getIdUsers()', err);
+            throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');
+        };
+    };
+
+    @Patch(':id')
+    async setIdUsers(@Param('id') id:number, @Body() dto:UsersDTO ): Promise<IResponseUser> {
+        try {
+            return this.usersRepository.updateUserID(id, dto);
         } catch(err) {
             console.error('Error en setIdUsers()', err);
             throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');
@@ -77,13 +56,9 @@ export class UsersController {
     };
 
     @Delete(':id')
-    async deleteUsers( @Param('id', DecodeBase64Params) id:number ): Promise<IResponseUser> {
+    async deleteUsers( @Param('id') id:number ): Promise<IResponseUser> {
         try {
-            const { data, message } = await  this.usersRepository.deleteUser(id);
-            return {
-                data,
-                message,
-            };
+            return this.usersRepository.deleteUser(id);
         } catch(err) {
             console.error('Error en deleteUsers()', err);
             throw err instanceof BadRequestException ? err : new InternalServerErrorException('Error interno');
