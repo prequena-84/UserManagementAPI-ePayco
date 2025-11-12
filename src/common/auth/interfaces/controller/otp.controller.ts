@@ -2,7 +2,7 @@ import { Controller, Body, Get, Post } from '@nestjs/common';
 import { AuthOtpRepository } from '../../infrastructure/repositories/otp.repository';
 import { OtpDTO } from '../dto/create.otp.dto';
 
-@Controller('UserManagementAPI/V1/Auth')
+@Controller('api/v1/service/Auth')
 export class OtpAuthController {
     constructor( private readonly otpAuth:AuthOtpRepository ) {};
 

@@ -2,7 +2,7 @@ import { Controller, Body, Post, Param  } from '@nestjs/common';
 import { TokenService } from '../../infrastructure/repositories/token.repository';
 import { TokenDTO } from '../dto/token.dto';
 
-@Controller('UserManagementAPI/V1/token/validate')
+@Controller('api/v1/service/token')
 export class TokenController {
     constructor( private readonly tokenServices:TokenService ) {}
 
