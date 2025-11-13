@@ -5,18 +5,18 @@ export class TransactionsDTO {
     @IsNotEmpty()
     id?:string
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    userDocument:number;
+    document:string;
 
     @IsString()
     @IsNotEmpty()
     @IsIn(['recarga', 'pago'])
     type:'recarga' | 'pago';
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    amount:number;
+    amount:string;
 
     @IsString()
     @IsNotEmpty()
@@ -25,9 +25,9 @@ export class TransactionsDTO {
 
     @IsString()
     @IsOptional()
-    tokenConfirmation?:string | null;
+    tokenConfirmation?:string;
 
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    sessionExp?:number | null;
+    sessionExp?:string;
 };

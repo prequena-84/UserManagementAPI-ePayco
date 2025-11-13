@@ -16,7 +16,7 @@ export class UsersRepository {
         return requestFecth<IUser[]>( String(this.configService.get<string>('URI_USERS')));
     };
 
-    async findUserById( document:number ): Promise<IResponseUser> {
+    async findUserById( document:string ): Promise<IResponseUser> {
         return requestFecth<IUser>(`${String(this.configService.get<string>('URI_USERS'))}/${document}`);
     };
     
@@ -24,7 +24,7 @@ export class UsersRepository {
         return requestFecth<IUser>( String(this.configService.get<string>('URI_USERS')), "POST", data );
     };
 
-    async updateUserID( id:number, data:IUser ): Promise<IResponseUser> {
+    async updateUserID( id:string, data:IUser ): Promise<IResponseUser> {
         return requestFecth<IUser>(`${String( this.configService.get<string>('URI_USERS') )}/${id}`, "PATCH", data);
     };
 

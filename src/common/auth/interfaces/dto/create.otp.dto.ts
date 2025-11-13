@@ -1,9 +1,9 @@
 import { IsString, IsNotEmpty, IsNumber } from "class-validator";
 
 export class OtpDTO {
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    document:number;
+    document:string;
 
     @IsString()
     @IsNotEmpty()

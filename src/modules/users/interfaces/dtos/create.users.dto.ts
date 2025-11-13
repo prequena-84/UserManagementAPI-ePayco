@@ -1,9 +1,9 @@
 import { IsString, IsNotEmpty, IsNumber } from "class-validator";
 
 export class UsersDTO {
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    document:number;
+    document:string;
 
     @IsString()
     @IsNotEmpty()
@@ -17,7 +17,7 @@ export class UsersDTO {
     @IsNotEmpty()
     phone:string;
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    balance?:number | null;
+    balance?:string;
 };

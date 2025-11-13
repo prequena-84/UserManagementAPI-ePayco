@@ -1,7 +1,7 @@
 export interface IUser {
-    document:number;
-    name:string;
-    email:string;
-    phone:string;
-    balance?:number | null;
+    document?:string;
+    name?:string;
+    email?:string;
+    phone?:string;
+    balance?:string;
 }

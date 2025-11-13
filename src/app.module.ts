@@ -31,7 +31,7 @@ export class AppModule implements NestModule {
     consumer
     .apply(AuthMiddleware)
     .forRoutes(
-      {path:'UserManagementAPI/V1/transactions/confirmation/', method: RequestMethod.POST},
+      {path:'api/v1/service/transactions/confirmation', method: RequestMethod.POST},
     );
   };
 };

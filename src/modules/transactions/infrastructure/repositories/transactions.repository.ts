@@ -2,6 +2,10 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { ConfigService } from '@nestjs/config';
 import { UsersRepository } from 'src/modules/users/infrastructure/repositories/users.repositories';
 import requestFecth from 'src/common/utils/fetch/fetch.utils';
+import codeNumberBase64 from 'src/common/pipes/code/code-base64-number.pipe';
+import codeStringBase64 from 'src/common/pipes/code/code-base64-string.pipe';
+import decodeNumberBase64 from 'src/common/pipes/decode/decode-base64-number.pipe';
+import decodeStringBase64 from 'src/common/pipes/decode/decode-base64-string.pipe';
 
 import type { ITransaction } from 'src/modules/transactions/interfaces/types/transaction.interfaces';
 import type { IResponseTransaction, IResponseTransactions } from 'src/modules/transactions/interfaces/types/response-transaction.interfaces';
@@ -29,32 +33,25 @@ export class TransactionsRepository {
     };
 
     async createTransaction( transactions:ITransaction ): Promise<IResponseTransaction> {
-        if ( transactions.type === "recarga" && transactions.amount > 0 ) {
-            const users = await requestFecth<IUser> (
-                `${String(this.configService.get<string>('URI_USERS'))}/${transactions.userDocument}`, 
-                "GET"
-            );
-            users.data.balance = (users.data.balance ?? 0) + Number(transactions.amount);
-        
+        if ( decodeStringBase64(transactions.type) === "recarga" && decodeNumberBase64(transactions.amount) > 0 ) {
+            const users = await requestFecth<IUser> (`${String(this.configService.get<string>('URI_USERS'))}/${transactions.document}`, "GET");
+            users.data.balance= codeNumberBase64(parseFloat(users.data.balance?.toString() ?? '0') + decodeNumberBase64(transactions.amount));
+               
             await requestFecth<IUser> (
-                `${String(this.configService.get<string>('URI_USERS'))}/${transactions.userDocument}`, 
+                `${String(this.configService.get<string>('URI_USERS'))}/${transactions.document}`, 
                 "PATCH", 
-                users.data
+                { "balance": users.data.balance }
             );  
         };
 
-        return requestFecth<ITransaction> (
-            String( this.configService.get<string>('URI_TRANSACTIONS') ),
-            "POST", 
-            transactions,
-        );
+        return requestFecth<ITransaction> (String( this.configService.get<string>('URI_TRANSACTIONS') ), "POST", transactions);
     };
 
-    async updateTransactionId( id:string, data:ITransaction ): Promise<IResponseTransaction> {
+    async updateTransactionId( id:string, data:Partial<ITransaction>): Promise<IResponseTransaction> {
         return requestFecth<ITransaction> (
             `${String(this.configService.get<string>('URI_TRANSACTIONS'))}/${id}`,
             "PATCH", 
-            data
+            data as unknown as ITransaction
         );
     };
 
@@ -62,21 +59,22 @@ export class TransactionsRepository {
         return requestFecth<ITransaction>(`${String(this.configService.get<string>('URI_TRANSACTIONS'))}/${id}`,"DELETE");
     };
 
-    async transactionConfirmation(document:number, id:string): Promise<IResponseConfirmation> {
+    async transactionConfirmation(document:string, id:string): Promise<IResponseConfirmation> {
         const users = await this.userRepository.findUserById(document);
         const transactions = await this.findTransactionById(id);
 
         if (!users) throw new NotFoundException('Usuario no encontrado');
         if (!transactions) throw new NotFoundException('Transacción no encontrada');
+        if ( users.data.document !== transactions.data.document ) throw new BadRequestException('El numero de documento no coincide con el registrado en la transacción, por favor reviselo');   
+        if ( decodeNumberBase64(users.data.balance) < decodeNumberBase64(transactions.data.amount) ) throw new BadRequestException('El saldo que tiene en la cuenta es insuficiente por favor recargue');
 
-        if ( users.data.document !== transactions.data.userDocument ) throw new BadRequestException('El numero de documento no coincide con el registrado en la transacción, por favor reviselo');
-        if ( users.data.balance ?? 0 < transactions.data.amount ) throw new BadRequestException('El saldo que tiene en la cuenta es insuficiente por favor recargue');
-
-        transactions.data.status = 'confirmada';
-        users.data.balance = (users.data.balance ?? 0 ) + transactions.data.amount;
-
-        await this.updateTransactionId(transactions.data.id ?? '', transactions.data);
-        await this.userRepository.updateUserID(users.data.document, users.data);
+        await this.updateTransactionId(codeStringBase64(transactions.data.id ?? ''), {
+            "status":codeStringBase64('confirmada'),
+        });
+        
+        await this.userRepository.updateUserID(codeNumberBase64(parseInt(users.data.document)), {
+            "balance":codeNumberBase64(parseFloat(users.data.balance ?? '0') - parseFloat(transactions.data.amount)),
+        });
 
         return {
             message:"Transacción confirmada",

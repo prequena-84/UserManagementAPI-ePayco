@@ -24,7 +24,7 @@ export class TokenService {
         const { data } = await this.transactionsRepository.findTransactionById(id);
 
         if ( !data.tokenConfirmation || !data.sessionExp ) return false;
-        if ( data.tokenConfirmation === token && timeCurrent < data.sessionExp ) return true;
+        if ( data.tokenConfirmation === token && timeCurrent < parseInt(data.sessionExp) ) return true;
         return false;
     };
 };

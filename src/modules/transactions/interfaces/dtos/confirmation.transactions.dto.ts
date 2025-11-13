@@ -1,9 +1,9 @@
 import { IsString, IsNotEmpty, IsNumber, IsOptional, IsIn } from "class-validator";
 
 export class ConfirmationsDTO {
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    document:number
+    document:string
 
     @IsString()
     @IsNotEmpty()

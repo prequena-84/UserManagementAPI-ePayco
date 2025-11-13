@@ -36,7 +36,7 @@ export class UsersController {
     };
 
     @Get(':id')
-    async getIdUsers( @Param('id') id:number): Promise<IResponseUser> {
+    async getIdUsers( @Param('id') id:string): Promise<IResponseUser> {
         try {
             return this.usersRepository.findUserById(id);
         } catch(err)  {
@@ -46,7 +46,7 @@ export class UsersController {
     };
 
     @Patch(':id')
-    async setIdUsers(@Param('id') id:number, @Body() dto:UsersDTO ): Promise<IResponseUser> {
+    async setIdUsers(@Param('id') id:string, @Body() dto:UsersDTO ): Promise<IResponseUser> {
         try {
             return this.usersRepository.updateUserID(id, dto);
         } catch(err) {

@@ -23,7 +23,7 @@ export default async function requestFecth<TResponse, TRequestBody = TResponse> 
     });
 
     if ( !response.ok ) throw new InternalServerErrorException('Error en la red o la solicitud falló')
-    const data = await response.json()
+    const data = await response.json();
 
     return data;
 
