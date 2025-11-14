@@ -26,9 +26,4 @@ export default async function requestFecth<TResponse, TRequestBody = TResponse> 
     const data = await response.json();
 
     return data;
-
-    /*return {
-        data,
-        message:data.message,
-    };*/
 };
